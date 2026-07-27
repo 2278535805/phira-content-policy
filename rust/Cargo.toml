@@ -1,5 +1,5 @@
 [workspace]
-members = ["data", "meili", "types"]
+members = ["data", "types"]
 resolver = "2"
 
 [workspace.package]
