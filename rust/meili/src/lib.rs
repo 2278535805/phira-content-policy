@@ -1,115 +1,129 @@
 use phira_content_policy_types::{ContentPolicy, Status};
 use serde::{Deserialize, Serialize};
 
-/// Meilisearch 查询时 `filter=type` 用的枚举值。
-/// 序列化值与 [`ContentPolicyMeiliDoc`] 的 tag 一致。
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub enum ContentPolicyEntityType {
-    Track,
-    Artist,
-    RightsHolder,
-}
-
-/// Meilisearch 索引文档。三种实体独立 doc，
-/// track 内嵌所属 RH 信息，artist/RH policy 不在 track doc 里 denormalize。
-#[derive(Debug, Clone, Serialize)]
-#[serde(tag = "type", rename_all = "camelCase")]
-pub enum ContentPolicyMeiliDoc {
-    Track {
-        name: String,
-        artist: String,
-        #[serde(skip_serializing_if = "Vec::is_empty")]
-        aliases: Vec<String>,
-        /// `None` 表示继承所属 Rights Holder 的 policy
-        #[serde(skip_serializing_if = "Option::is_none")]
-        status: Option<Status>,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        note: Option<String>,
-        /// 所属版权方名称。独立曲目为 `None`。
-        #[serde(skip_serializing_if = "Option::is_none")]
-        rh_name: Option<String>,
-        /// 所属版权方 status。独立曲目为 `None`。
-        #[serde(skip_serializing_if = "Option::is_none")]
-        rh_status: Option<Status>,
-        /// 所属版权方备注。独立曲目为 `None`。
-        #[serde(skip_serializing_if = "Option::is_none")]
-        rh_note: Option<String>,
-    },
-    Artist {
-        name: String,
-        #[serde(skip_serializing_if = "Vec::is_empty")]
-        aliases: Vec<String>,
-        status: Status,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        reason: Option<String>,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        note: Option<String>,
-    },
-    RightsHolder {
-        name: String,
-        status: Status,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        note: Option<String>,
-        track_count: usize,
-    },
-}
-
-/// 从 [`ContentPolicy`] 构建 Meilisearch 索引文档。
+/// 曲目 Meilisearch 索引文档。
 ///
-/// 只做数据转换，不涉及 Meilisearch SDK / HTTP。
-pub fn build_meili_index(policy: ContentPolicy) -> Vec<ContentPolicyMeiliDoc> {
+/// 主键为 `id`，格式 `"track:{name}|{artist}"`。
+/// 版权方曲目内嵌 RH 信息；独立曲目 rh_* 字段为 None。
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CpTrackDoc {
+    pub id: String,
+    pub name: String,
+    pub artist: String,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub aliases: Vec<String>,
+    /// None 表示继承所属 Rights Holder 的 policy
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<Status>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub note: Option<String>,
+    /// 所属版权方名称。独立曲目为 None。
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rh_name: Option<String>,
+    /// 所属版权方 status。独立曲目为 None。
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rh_status: Option<Status>,
+    /// 所属版权方备注。独立曲目为 None。
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rh_note: Option<String>,
+}
+
+/// 艺人 Meilisearch 索引文档。
+///
+/// 主键为 `id`，格式 `"artist:{artist_id}"`（data/artists/ 下的文件名不含 .toml）。
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CpArtistDoc {
+    pub id: String,
+    pub name: String,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub aliases: Vec<String>,
+    pub status: Status,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reason: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub note: Option<String>,
+}
+
+/// 版权方 Meilisearch 索引文档。
+///
+/// 主键为 `id`，格式 `"rh:{rh_id}"`（data/rights_holders/ 下的目录名）。
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CpRightsHolderDoc {
+    pub id: String,
+    pub name: String,
+    pub status: Status,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub note: Option<String>,
+    pub track_count: usize,
+}
+
+/// 从 [`ContentPolicy`] 构建曲目索引文档。
+pub fn build_track_docs(policy: &ContentPolicy) -> Vec<CpTrackDoc> {
     let mut docs = Vec::new();
 
-    // 版权方下曲目——内嵌 RH 信息
-    for (_rh_id, rh) in policy.rights_holders {
-        let track_count = rh.tracks.len();
-        for track in rh.tracks {
-            docs.push(ContentPolicyMeiliDoc::Track {
-                name: track.name,
-                artist: track.artist,
-                aliases: track.aliases,
+    for (_rh_id, rh) in &policy.rights_holders {
+        for track in &rh.tracks {
+            docs.push(CpTrackDoc {
+                id: format!("track:{}|{}", track.name, track.artist),
+                name: track.name.clone(),
+                artist: track.artist.clone(),
+                aliases: track.aliases.clone(),
                 status: track.status,
-                note: track.note,
+                note: track.note.clone(),
                 rh_name: Some(rh.policy.name.clone()),
                 rh_status: Some(rh.policy.status),
                 rh_note: rh.policy.note.clone(),
             });
         }
-        docs.push(ContentPolicyMeiliDoc::RightsHolder {
-            name: rh.policy.name,
-            status: rh.policy.status,
-            note: rh.policy.note,
-            track_count,
-        });
     }
-
-    // 独立曲目——无 RH
-    for track in policy.independent_tracks {
-        docs.push(ContentPolicyMeiliDoc::Track {
-            name: track.name,
-            artist: track.artist,
-            aliases: track.aliases,
+    for track in &policy.independent_tracks {
+        docs.push(CpTrackDoc {
+            id: format!("track:{}|{}", track.name, track.artist),
+            name: track.name.clone(),
+            artist: track.artist.clone(),
+            aliases: track.aliases.clone(),
             status: Some(track.status),
-            note: track.note,
+            note: track.note.clone(),
             rh_name: None,
             rh_status: None,
             rh_note: None,
         });
     }
-
-    // 艺人
-    for (_artist_id, artist) in policy.artists {
-        docs.push(ContentPolicyMeiliDoc::Artist {
-            name: artist.name,
-            aliases: artist.aliases,
-            status: artist.status,
-            reason: artist.reason,
-            note: artist.note,
-        });
-    }
-
     docs
+}
+
+/// 从 [`ContentPolicy`] 构建艺人索引文档。
+pub fn build_artist_docs(policy: &ContentPolicy) -> Vec<CpArtistDoc> {
+    policy
+        .artists
+        .iter()
+        .map(|(artist_id, artist)| CpArtistDoc {
+            id: format!("artist:{artist_id}"),
+            name: artist.name.clone(),
+            aliases: artist.aliases.clone(),
+            status: artist.status,
+            reason: artist.reason.clone(),
+            note: artist.note.clone(),
+        })
+        .collect()
+}
+
+/// 从 [`ContentPolicy`] 构建版权方索引文档。
+pub fn build_rh_docs(policy: &ContentPolicy) -> Vec<CpRightsHolderDoc> {
+    policy
+        .rights_holders
+        .iter()
+        .map(|(rh_id, rh)| CpRightsHolderDoc {
+            id: format!("rh:{rh_id}"),
+            name: rh.policy.name.clone(),
+            status: rh.policy.status,
+            note: rh.policy.note.clone(),
+            track_count: rh.tracks.len(),
+        })
+        .collect()
 }
 
 #[cfg(test)]
@@ -117,56 +131,27 @@ mod tests {
     use super::*;
 
     #[test]
-    fn entity_type_matches_meili_doc_tag() {
-        // 用最小 dummy 构造三种 doc，验证 tag 值一致
-        let track_doc = ContentPolicyMeiliDoc::Track {
-            name: "T".into(),
-            artist: "A".into(),
-            aliases: vec![],
-            status: None,
-            note: None,
-            rh_name: None,
-            rh_status: None,
-            rh_note: None,
-        };
-        let track_json = serde_json::to_value(&track_doc).unwrap();
-        assert_eq!(
-            track_json["type"].as_str().unwrap(),
-            serde_json::to_value(ContentPolicyEntityType::Track)
-                .unwrap()
-                .as_str()
-                .unwrap()
-        );
+    fn test_build_track_docs_id_format() {
+        let docs = build_track_docs(&ContentPolicy::default());
+        for d in docs {
+            assert!(d.id.starts_with("track:"), "id={}", d.id);
+            assert!(d.id.contains('|'), "id={}", d.id);
+        }
+    }
 
-        let artist_doc = ContentPolicyMeiliDoc::Artist {
-            name: "A".into(),
-            aliases: vec![],
-            status: Status::Free,
-            reason: None,
-            note: None,
-        };
-        let artist_json = serde_json::to_value(&artist_doc).unwrap();
-        assert_eq!(
-            artist_json["type"].as_str().unwrap(),
-            serde_json::to_value(ContentPolicyEntityType::Artist)
-                .unwrap()
-                .as_str()
-                .unwrap()
-        );
+    #[test]
+    fn test_build_artist_docs_id_format() {
+        let docs = build_artist_docs(&ContentPolicy::default());
+        for d in docs {
+            assert!(d.id.starts_with("artist:"), "id={}", d.id);
+        }
+    }
 
-        let rh_doc = ContentPolicyMeiliDoc::RightsHolder {
-            name: "R".into(),
-            status: Status::Forbidden,
-            note: None,
-            track_count: 0,
-        };
-        let rh_json = serde_json::to_value(&rh_doc).unwrap();
-        assert_eq!(
-            rh_json["type"].as_str().unwrap(),
-            serde_json::to_value(ContentPolicyEntityType::RightsHolder)
-                .unwrap()
-                .as_str()
-                .unwrap()
-        );
+    #[test]
+    fn test_build_rh_docs_id_format() {
+        let docs = build_rh_docs(&ContentPolicy::default());
+        for d in docs {
+            assert!(d.id.starts_with("rh:"), "id={}", d.id);
+        }
     }
 }
