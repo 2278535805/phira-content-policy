@@ -1,0 +1,22 @@
+include = ["data/**/*.toml"]
+exclude = ["**/node_modules/**", "**/target/**"]
+
+# Rights-holder _policy.toml files: { name, status, note? }
+[[rule]]
+include = ["data/rights_holders/**/_policy.toml"]
+[rule.schema]
+path = "schema/rights-holder-policy.json"
+
+# Rights-holder track-list files: [[track]] collections.
+# Excludes _policy.toml so it isn't validated against the track schema.
+[[rule]]
+include = ["data/rights_holders/**/*.toml"]
+exclude = ["data/rights_holders/**/_policy.toml"]
+[rule.schema]
+path = "schema/track-file.json"
+
+# Artist entry files.
+[[rule]]
+include = ["data/artists/*.toml"]
+[rule.schema]
+path = "schema/artist.json"

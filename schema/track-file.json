@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "track": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "artist": {
+            "type": "string",
+            "minLength": 1
+          },
+          "artistIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "forbidden",
+              "restricted",
+              "free"
+            ]
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "artist"
+        ],
+        "additionalProperties": true
+      }
+    }
+  },
+  "required": [
+    "track"
+  ],
+  "additionalProperties": true,
+  "title": "Track File",
+  "description": "A track-list TOML file (collection of [[track]]) under a rights holder directory."
+}

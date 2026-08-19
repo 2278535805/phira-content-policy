@@ -36,6 +36,13 @@ repos:
         pass_filenames: false
         always_run: true
 
+      - id: check-schema
+        name: check schema freshness
+        entry: bash -c 'cd web && bash scripts/check-schema.sh'
+        language: system
+        files: ^(web/src/data/schema\.ts|web/scripts/gen-json-schema\.ts)$
+        pass_filenames: false
+
       - id: typecheck
         name: typecheck
         entry: bash -c 'cd web && pnpm run build'

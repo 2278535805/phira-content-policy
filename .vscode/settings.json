@@ -1,0 +1,7 @@
+{
+  "evenBetterToml.schema.associations": {
+    "**/data/rights_holders/**/*.toml": "schema/track-file.json",
+    "**/data/rights_holders/**/_policy.toml": "schema/rights-holder-policy.json",
+    "**/data/artists/*.toml": "schema/artist.json"
+  }
+}

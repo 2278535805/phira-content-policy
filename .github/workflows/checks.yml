@@ -81,6 +81,9 @@ jobs:
       - name: Validate Data
         run: pnpm run validate:data
 
+      - name: Check Schema Freshness
+        run: bash scripts/check-schema.sh
+
       - name: Download artifact
         uses: actions/download-artifact@v8
         with:

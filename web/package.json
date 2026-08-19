@@ -11,7 +11,8 @@
     "lint:fix": "oxlint --fix .",
     "fmt": "oxfmt .",
     "fmt:check": "oxfmt --check .",
-    "validate:data": "tsx scripts/validate.ts"
+    "validate:data": "tsx scripts/validate.ts",
+    "gen:schema": "tsx scripts/gen-json-schema.ts"
   },
   "dependencies": {
     "vue": "^3.5.25"
