@@ -28,3 +28,33 @@ name = "FANTA5Y"
 artist = "Moon Jelly & YUKIYANAGI"
 songPack = "World Extend"
 note = "2022公募优胜曲"
+
+[[track]]
+name = "mod"
+artist = "kalsoer"
+songPack = "World Extend"
+note = "2024公募优胜曲"
+
+[[track]]
+name = "Paradox Palette"
+artist = "Aethoro"
+songPack = "World Extend"
+note = "2024公募优胜曲"
+
+[[track]]
+name = "Wake in Hour"
+artist = "有村京悟 feat.July"
+songPack = "World Extend"
+note = "2024公募优胜曲，原标题为“始マりノ詩”"
+
+[[track]]
+name = "undefined"
+artist = "planless & 乃花こより"
+songPack = "World Extend"
+note = "2024公募优胜曲"
+
+[[track]]
+name = "~_+"
+artist = "AQUASINE ~ MEMODEMO + METAROOM"
+songPack = "World Extend"
+note = "2024公募优胜曲"

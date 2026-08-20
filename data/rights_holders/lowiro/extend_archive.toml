@@ -50,3 +50,36 @@ note = "2020公募优胜曲"
 name = "blue comet"
 artist = "ああああ"
 songPack = "Extend Archive"
+
+[[track]]
+name = "MANTIS (Arcaea Ultra-Bloodrush VIP)"
+artist = "Akira Complex feat. kiraku"
+songPack = "Extend Archive"
+
+[[track]]
+name = "Lethal Voltage"
+artist = "siqlo"
+songPack = "Extend Archive"
+
+[[track]]
+name = "Old School Salvage"
+artist = "DJ SHARPNEL"
+songPack = "Extend Archive"
+
+[[track]]
+name = "Alone & Lorn"
+artist = "Ponchi♪ feat.はぁち"
+songPack = "Extend Archive"
+note = "2022公募优胜曲，原标题为“アローンアンドローン”"
+
+[[track]]
+name = "disintegration"
+artist = "ひゅ〜ぶ"
+songPack = "Extend Archive"
+note = "2024公募优胜曲"
+
+[[track]]
+name = "ROST PAGE GENE"
+artist = "MYUKKE."
+songPack = "Extend Archive"
+note = "2024公募优胜曲"
