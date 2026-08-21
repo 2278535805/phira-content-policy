@@ -22,11 +22,19 @@ fn parse_toml_file<T: for<'de> Deserialize<'de>>(path: &Path) -> Result<T> {
     toml::from_str(&content).with_context(|| format!("Invalid TOML in {}", path.display()))
 }
 
+/// 与 web 侧 z.string().min(1) 对齐: name/artist 不得为空字符串
+fn ensure_nonempty(s: &str, what: &str, path: &Path) -> Result<()> {
+    if s.is_empty() {
+        anyhow::bail!("empty {what} in {}", path.display());
+    }
+    Ok(())
+}
+
 fn load_rights_holder(dir: &Path) -> Result<ResolvedRightsHolder> {
     let policy_path = dir.join("_policy.toml");
     let policy: RightsHolderPolicy = parse_toml_file(&policy_path)
         .with_context(|| format!("Missing or invalid _policy.toml in {}", dir.display()))?;
-
+    ensure_nonempty(&policy.name, "rights holder name", &policy_path)?;
     let mut tracks = Vec::new();
     for entry in fs::read_dir(dir)? {
         let entry = entry?;
@@ -39,6 +47,10 @@ fn load_rights_holder(dir: &Path) -> Result<ResolvedRightsHolder> {
             continue;
         }
         let track_file: TrackFile = parse_toml_file(&entry.path())?;
+        for t in &track_file.track {
+            ensure_nonempty(&t.name, "track name", &entry.path())?;
+            ensure_nonempty(&t.artist, "track artist", &entry.path())?;
+        }
         tracks.extend(track_file.track);
     }
 
@@ -82,6 +94,7 @@ fn load_artists(dir: &Path) -> Result<HashMap<String, Artist>> {
             continue;
         }
         let artist: Artist = parse_toml_file(&entry.path())?;
+        ensure_nonempty(&artist.name, "artist name", &entry.path())?;
         let key = name.strip_suffix(".toml").unwrap_or(name);
         map.insert(key.to_string(), artist);
     }
@@ -104,6 +117,10 @@ fn load_independent_tracks(dir: &Path) -> Result<Vec<IndependentTrackEntry>> {
             continue;
         }
         let track_file: IndependentTrackFile = parse_toml_file(&entry.path())?;
+        for t in &track_file.track {
+            ensure_nonempty(&t.name, "independent track name", &entry.path())?;
+            ensure_nonempty(&t.artist, "independent track artist", &entry.path())?;
+        }
         tracks.extend(track_file.track);
     }
     Ok(tracks)
