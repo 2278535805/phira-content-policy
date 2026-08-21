@@ -77,3 +77,20 @@ export interface ContentPolicy {
   artists: Record<string, Artist>;
   independentTracks: IndependentTrackEntry[];
 }
+
+/**
+ * 完整数据集的 JSON 形态（与 Rust 导出的 content-policy.json 对齐）。
+ * validate-json.ts 用这份校验导出的 JSON，保证与 toml 加载同一事实源。
+ * tracks / independentTracks 必填：Rust 端恒输出数组（空则 []）。
+ */
+export const contentPolicySchema = z.object({
+  rightsHolders: z.record(
+    z.string(),
+    z.object({
+      policy: rightsHolderPolicySchema,
+      tracks: z.array(trackEntrySchema),
+    }),
+  ),
+  artists: z.record(z.string(), artistSchema),
+  independentTracks: z.array(independentTrackEntrySchema),
+});

@@ -85,14 +85,6 @@ async function loadRightsHolder(dirPath: string): Promise<LoadResult<ResolvedRig
       !e.name.startsWith("."),
   );
 
-  if (entries.length === 0) {
-    errors.push({
-      filePath: dirPath,
-      kind: "structure",
-      message: "No track files found in rights holder directory",
-    });
-  }
-
   let trackErrors = false;
   for (const entry of entries) {
     const filePath = join(dirPath, entry.name);

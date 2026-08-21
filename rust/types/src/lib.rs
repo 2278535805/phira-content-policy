@@ -85,7 +85,7 @@ pub struct Artist {
 #[serde(rename_all = "camelCase")]
 pub struct ResolvedRightsHolder {
     pub policy: RightsHolderPolicy,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    #[serde(default)]
     pub tracks: Vec<TrackEntry>,
 }
 
@@ -103,6 +103,6 @@ pub struct ContentPolicy {
     pub rights_holders: HashMap<String, ResolvedRightsHolder>,
     #[serde(default)]
     pub artists: HashMap<String, Artist>,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    #[serde(default)]
     pub independent_tracks: Vec<IndependentTrackEntry>,
 }
