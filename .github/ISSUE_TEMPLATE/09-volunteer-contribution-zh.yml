@@ -1,0 +1,64 @@
+name: 志愿者贡献
+description: 作为志愿者提供数据补充、来源引用、批量录入或整理建议。
+title: "[贡献] "
+labels: ["contribution", "data"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你的贡献！本数据库依赖社区志愿者补充和核实数据。请尽量提供可核实的来源，便于维护者采纳。
+
+  - type: dropdown
+    id: contribution-type
+    attributes:
+      label: 贡献类型
+      options:
+        - 补充曲目列表（某版权方 / 曲包的全部曲目）
+        - 补充艺人信息（别名、马甲、合作曲归属）
+        - 补充参考来源（为已有条目补充官方链接）
+        - 批量数据整理 / 校对
+        - 其他
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: scope
+    attributes:
+      label: 涉及范围
+      description: 你贡献的内容涉及哪些版权方 / 艺人 / 曲目？
+      placeholder: 例如：Phigros 全部本家曲目
+    validations:
+      required: true
+
+  - type: textarea
+    id: data
+    attributes:
+      label: 数据内容
+      description: 请粘贴你要贡献的数据（曲目名、曲师、状态、备注等）。若内容较多，可整理成表格或附件。
+      placeholder: |
+        | 曲名 | 曲师 | 状态 | 备注 |
+        |------|------|------|------|
+        | ...  | ...  | ...  | ...  |
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: 参考来源
+      description: 提供每条数据的来源链接（官方曲包列表、游戏内信息、bilibili 专栏、曲师/版权方声明等）。
+      placeholder: |
+        - https://...
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 确认
+      options:
+        - label: 我提供的数据有可靠来源，可被核实
+          required: true
+        - label: 我同意维护者在此基础上整理并录入数据库
+          required: true

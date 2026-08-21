@@ -1,0 +1,86 @@
+name: 数据有误报告
+description: 报告数据库中某条策略信息有误（状态、曲目归属、艺人信息等）。
+title: "[数据有误] "
+labels: ["data-error"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你帮助修正数据库！请先到[在线查询页面](https://teamflos.github.io/phira-content-policy/)确认你要反馈的内容，并尽量提供可核实的来源。
+
+  - type: dropdown
+    id: entry-type
+    attributes:
+      label: 有误的条目类型
+      description: 你反馈的是哪一类条目？
+      options:
+        - 版权方（rights_holders）
+        - 曲目（track）
+        - 艺人（artist）
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: entry-name
+    attributes:
+      label: 条目名称
+      description: 有误的版权方 / 曲目 / 艺人名称（尽量与数据库中的写法一致）。
+      placeholder: 例如：Arcaea / Vexaria / Ice
+    validations:
+      required: true
+
+  - type: dropdown
+    id: error-type
+    attributes:
+      label: 错误类型
+      description: 具体是什么问题？
+      options:
+        - 状态错误（forbidden / restricted / free 判断有误）
+        - 曲目归属错误（曲目被归到错误的版权方 / 艺人）
+        - 艺人信息错误（别名、马甲、合作曲归属等）
+        - 曲目信息错误（曲名、曲师、时长、所属曲包等）
+        - 缺少曲目 / 艺人条目（应收录但未收录）
+        - 其他
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: 当前数据库中的内容
+      description: 请粘贴当前数据库里显示的内容（或截图）。
+      placeholder: 例如：状态为 forbidden，但实际应为 free。
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 你认为正确的内容
+      description: 请说明应该是什么，以及为什么。
+      placeholder: 例如：该曲目为公募曲，版权方已授权，应改为 free。
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: 参考来源
+      description: 提供可核实的来源链接（官方公告、曲师/版权方声明、游戏内信息等），便于维护者核实。
+      placeholder: |
+        - https://...
+        - 截图 / 文档
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 确认
+      description: 提交前请确认。
+      options:
+        - label: 我已先在在线查询页面搜索确认，该问题确实存在
+          required: true
+        - label: 我提供的信息真实可靠，并愿意配合维护者进一步核实
+          required: true

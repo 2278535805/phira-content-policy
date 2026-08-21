@@ -1,0 +1,92 @@
+name: 添加曲目 / 版权方
+description: 请求在数据库中添加某首特定曲目、某个版权方或艺人条目。
+title: "[添加] "
+labels: ["data-add"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请先到[在线查询页面](https://teamflos.github.io/phira-content-policy/)确认该曲目 / 版权方 / 艺人**尚未收录**，再填写本表单。
+
+  - type: dropdown
+    id: add-type
+    attributes:
+      label: 要添加的内容
+      options:
+        - 单首曲目（track）
+        - 一批曲目（如某个曲包 / 某版权方全部曲目）
+        - 版权方（rights_holder）
+        - 艺人（artist）
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: name
+    attributes:
+      label: 名称
+      description: 曲目名 / 版权方名 / 艺人名。
+      placeholder: 例如：Vexaria
+    validations:
+      required: true
+
+  - type: input
+    id: artist
+    attributes:
+      label: 曲师（仅曲目需要）
+      description: 该曲目的曲师 / 艺人。
+      placeholder: 例如：ak+q
+    validations:
+      required: false
+
+  - type: input
+    id: rights-holder
+    attributes:
+      label: 版权方（仅曲目需要）
+      description: 该曲目所属的版权方（游戏 / 厂牌 / 发行方）。
+      placeholder: 例如：lowiro（Arcaea）
+    validations:
+      required: false
+
+  - type: dropdown
+    id: status
+    attributes:
+      label: 建议的状态
+      description: 你希望该条目标记为什么状态？（不确定可留空）
+      options:
+        - 不确定 / 由维护者判断
+        - forbidden（禁止使用）
+        - restricted（受限使用）
+        - free（可自由使用）
+      default: 0
+    validations:
+      required: false
+
+  - type: textarea
+    id: details
+    attributes:
+      label: 补充信息
+      description: 曲目所属曲包、时长、别名、马甲、合作曲归属等任何有助于录入的信息。
+      placeholder: 例如：该曲为 Arcaea 一周年纪念曲，收录于 Memory Archive。
+    validations:
+      required: false
+
+  - type: textarea
+    id: references
+    attributes:
+      label: 参考来源
+      description: 提供可核实的来源链接（官方曲包列表、游戏内信息、曲师/版权方声明等）。
+      placeholder: |
+        - https://...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 确认
+      options:
+        - label: 我已确认该条目尚未收录
+          required: true
+        - label: 我提供的信息真实可靠，并愿意配合维护者进一步核实
+          required: true

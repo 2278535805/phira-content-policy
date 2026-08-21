@@ -1,0 +1,77 @@
+name: Rights Holder Declaration
+description: A rights holder / publisher states their requirements for the use of their tracks on Phira (forbidden, restricted, or allowed).
+title: "[Rights Holder Declaration] "
+labels: ["rights-holder", "declaration"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Please fill this out only if you are the rights holder or their formally authorized representative.** This database records the rights holder's official stance on the use of their tracks on Phira, so identity verification is required.
+
+  - type: input
+    id: holder-name
+    attributes:
+      label: Rights holder name
+      description: Your company / label / team name.
+      placeholder: e.g. lowiro
+    validations:
+      required: true
+
+  - type: input
+    id: contact
+    attributes:
+      label: Contact information
+      description: Email / official account / website used by maintainers to verify your identity (e.g. Discord, Telegram, GitHub, X, etc.).
+      placeholder: e.g. official@example.com
+    validations:
+      required: true
+
+  - type: dropdown
+    id: status
+    attributes:
+      label: Declaration content
+      description: How would you like your tracks to be marked?
+      options:
+        - Forbidden
+        - Restricted (please specify the restrictions)
+        - Free
+        - Only for some tracks (please specify below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Which tracks does this declaration apply to? All of your tracks, or only specific tracks / packs?
+      placeholder: e.g. Applies to all of our tracks; or only to the "XXX" pack.
+    validations:
+      required: true
+
+  - type: textarea
+    id: conditions
+    attributes:
+      label: Restrictions (if applicable)
+      description: If restricted, please specify the exact restrictions (e.g. covers only, no editing, attribution required, etc.).
+    validations:
+      required: false
+
+  - type: textarea
+    id: references
+    attributes:
+      label: Official statement link
+      description: If this declaration has been published on your website / social media, please attach the link for archival purposes.
+      placeholder: |
+        - https://...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Identity confirmation
+      options:
+        - label: I confirm I am an official representative of this rights holder and have the authority to make statements about the use of these tracks
+          required: true
+        - label: I agree that maintainers may contact me regarding identity verification
+          required: true

@@ -1,0 +1,77 @@
+name: Artist Declaration
+description: A composer / artist states their requirements for the use of their tracks on Phira (forbidden, restricted, or allowed).
+title: "[Artist Declaration] "
+labels: ["artist", "declaration"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Please fill this out only if you are the composer/artist or their formally authorized representative.** This database records the composer's official stance on the use of their works on Phira, so identity verification is required.
+
+  - type: input
+    id: artist-name
+    attributes:
+      label: Your name / stage name
+      description: Your name in the database or your commonly used stage name.
+      placeholder: e.g. Ice
+    validations:
+      required: true
+
+  - type: input
+    id: contact
+    attributes:
+      label: Contact information
+      description: Email / official account (Discord, Telegram, GitHub, X, YouTube, website, etc.) used by maintainers to verify your identity.
+      placeholder: e.g. https://twitter.com/xxx
+    validations:
+      required: true
+
+  - type: dropdown
+    id: status
+    attributes:
+      label: Declaration content
+      description: How would you like your tracks to be marked?
+      options:
+        - Forbidden
+        - Restricted (please specify the restrictions)
+        - Free
+        - Only for some tracks (please specify below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Which tracks does this declaration apply to? All of your works, or only specific tracks? Does it include alternate names / collaborations?
+      placeholder: e.g. Applies to all tracks released under my name; excluding collaborations where I do not appear under my name.
+    validations:
+      required: true
+
+  - type: textarea
+    id: conditions
+    attributes:
+      label: Restrictions (if applicable)
+      description: If restricted, please specify the exact restrictions (e.g. covers only, no editing, attribution required, etc.).
+    validations:
+      required: false
+
+  - type: textarea
+    id: references
+    attributes:
+      label: Official statement link
+      description: If this declaration has been published on social media / your website, please attach the link for archival purposes.
+      placeholder: |
+        - https://...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Identity confirmation
+      options:
+        - label: I confirm I am the composer/artist or their formally authorized representative and have the authority to make statements about the use of these works
+          required: true
+        - label: I agree that maintainers may contact me regarding identity verification
+          required: true

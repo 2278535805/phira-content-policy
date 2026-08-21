@@ -1,0 +1,77 @@
+name: 曲师声明
+description: 曲师 / 艺人本人就自己的曲目在 Phira 上的使用提出要求（禁止、受限或允许）。
+title: "[曲师声明] "
+labels: ["artist", "declaration"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **请仅由曲师本人或其正式授权代表填写。** 本数据库记录的是曲师对其作品在 Phira 上使用的官方态度，因此需要核实身份。
+
+  - type: input
+    id: artist-name
+    attributes:
+      label: 你的名字 / 艺名
+      description: 你在数据库中的名字或常用艺名。
+      placeholder: 例如：Ice
+    validations:
+      required: true
+
+  - type: input
+    id: contact
+    attributes:
+      label: 联系方式
+      description: 用于维护者核实身份的邮箱 / 官方账号（B站、微博、微信公众号、官网等）。
+      placeholder: 例如：https://space.bilibili.com/xxx
+    validations:
+      required: true
+
+  - type: dropdown
+    id: status
+    attributes:
+      label: 声明内容
+      description: 你希望如何标记你的曲目？
+      options:
+        - 禁止使用（forbidden）
+        - 受限使用（restricted，请说明限制条件）
+        - 允许使用（free）
+        - 仅针对部分曲目（请在下方说明）
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: 适用范围
+      description: 该声明适用于哪些曲目？全部作品，还是仅特定曲目？是否包含马甲 / 合作曲？
+      placeholder: 例如：适用于全部以我名义发布的曲目；合作曲中不以我名义出现的除外。
+    validations:
+      required: true
+
+  - type: textarea
+    id: conditions
+    attributes:
+      label: 限制条件（如适用）
+      description: 若为 restricted，请说明具体限制（如仅允许翻唱、禁止剪辑、需标注来源等）。
+    validations:
+      required: false
+
+  - type: textarea
+    id: references
+    attributes:
+      label: 官方声明链接
+      description: 若该声明已在社交媒体 / 官网发布，请附上链接以便存档。
+      placeholder: |
+        - https://...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 身份确认
+      options:
+        - label: 我确认我是该曲师本人 / 其正式授权代表，有权就作品使用作出声明
+          required: true
+        - label: 我同意维护者就身份核实事宜与我联系
+          required: true

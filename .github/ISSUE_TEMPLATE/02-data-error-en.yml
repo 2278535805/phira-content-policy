@@ -1,0 +1,86 @@
+name: Data Error Report
+description: Report incorrect policy information in the database (status, track attribution, artist info, etc.).
+title: "[Data Error] "
+labels: ["data-error"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping fix the database! Please first check the [online query page](https://teamflos.github.io/phira-content-policy/) to confirm what you want to report, and provide verifiable sources whenever possible.
+
+  - type: dropdown
+    id: entry-type
+    attributes:
+      label: Entry type with the error
+      description: Which type of entry are you reporting?
+      options:
+        - Rights holder (rights_holders)
+        - Track
+        - Artist
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: entry-name
+    attributes:
+      label: Entry name
+      description: The name of the incorrect rights holder / track / artist (match the database spelling as closely as possible).
+      placeholder: e.g. Arcaea / Vexaria / Ice
+    validations:
+      required: true
+
+  - type: dropdown
+    id: error-type
+    attributes:
+      label: Error type
+      description: What exactly is the problem?
+      options:
+        - Wrong status (forbidden / restricted / free misjudged)
+        - Wrong track attribution (track assigned to the wrong rights holder / artist)
+        - Wrong artist info (aliases, alternate names, collaboration attribution, etc.)
+        - Wrong track info (title, composer, duration, pack, etc.)
+        - Missing track / artist entry (should be included but is not)
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: Current content in the database
+      description: Paste the content currently shown in the database (or a screenshot).
+      placeholder: e.g. Status is forbidden, but it should actually be free.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you believe is correct
+      description: Explain what it should be, and why.
+      placeholder: e.g. This track is an open-submission track and the rights holder has authorized it, so it should be free.
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: Reference sources
+      description: Provide verifiable source links (official announcements, composer/rights holder statements, in-game info, etc.) so maintainers can verify.
+      placeholder: |
+        - https://...
+        - Screenshot / document
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Confirmation
+      description: Please confirm before submitting.
+      options:
+        - label: I have searched the online query page and confirmed this issue exists
+          required: true
+        - label: The information I provide is truthful and reliable, and I am willing to cooperate with maintainers for further verification
+          required: true
