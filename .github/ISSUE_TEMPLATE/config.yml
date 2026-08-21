@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Phira 官网
+    url: https://phira.moe/
+    about: 关于 Phira 游戏本身的问题（账号、上传、审核等），请前往官网或官方社区反馈。
+  - name: 在线查询页面
+    url: https://teamflos.github.io/phira-content-policy/
+    about: 先在这里搜索确认你要反馈的曲目 / 版权方 / 艺人是否已收录，避免重复提交。

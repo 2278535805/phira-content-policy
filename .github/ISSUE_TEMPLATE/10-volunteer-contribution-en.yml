@@ -1,0 +1,64 @@
+name: Volunteer Contribution
+description: Contribute as a volunteer with data additions, source citations, batch entry, or organization suggestions.
+title: "[Contribution] "
+labels: ["contribution", "data"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your contribution! This database relies on community volunteers to supplement and verify data. Please provide verifiable sources whenever possible so maintainers can adopt your contribution.
+
+  - type: dropdown
+    id: contribution-type
+    attributes:
+      label: Contribution type
+      options:
+        - Supplement track lists (all tracks of a rights holder / pack)
+        - Supplement artist info (aliases, alternate names, collaboration attribution)
+        - Supplement reference sources (add official links to existing entries)
+        - Batch data organization / proofreading
+        - Other
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: scope
+    attributes:
+      label: Scope
+      description: Which rights holders / artists / tracks does your contribution cover?
+      placeholder: e.g. All Phigros original tracks
+    validations:
+      required: true
+
+  - type: textarea
+    id: data
+    attributes:
+      label: Data content
+      description: Paste the data you want to contribute (track name, composer, status, notes, etc.). If there is a lot, you can organize it into a table or attachment.
+      placeholder: |
+        | Track | Composer | Status | Notes |
+        |-------|----------|--------|-------|
+        | ...   | ...      | ...    | ...   |
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: Reference sources
+      description: Provide source links for each piece of data (official pack lists, in-game info, YouTube/Twitter posts, composer/rights holder statements, etc.).
+      placeholder: |
+        - https://...
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Confirmation
+      options:
+        - label: The data I provide has reliable sources and can be verified
+          required: true
+        - label: I agree that maintainers may organize and enter this data into the database
+          required: true

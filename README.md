@@ -2,7 +2,7 @@
 
 # Phira Content Policy
 
-[Phira](https://phira.teamflos.com/) 社区的内容策略数据库。提供可查询、可追溯的版权策略信息，帮助判断某首曲目、某个版权方或某位艺人在 Phira 上是否可用。
+[Phira](https://phira.moe/) 社区的内容策略数据库。提供可查询、可追溯的版权策略信息，帮助判断某首曲目、某个版权方或某位艺人在 Phira 上是否可用。
 
 **在线查询：[teamflos.github.io/phira-content-policy](https://teamflos.github.io/phira-content-policy/)**
 

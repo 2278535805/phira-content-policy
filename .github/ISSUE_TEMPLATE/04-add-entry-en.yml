@@ -1,0 +1,92 @@
+name: Add Track / Rights Holder
+description: Request to add a specific track, rights holder, or artist entry to the database.
+title: "[Add] "
+labels: ["data-add"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please first check the [online query page](https://teamflos.github.io/phira-content-policy/) to confirm that this track / rights holder / artist is **not yet included**, then fill out this form.
+
+  - type: dropdown
+    id: add-type
+    attributes:
+      label: What to add
+      options:
+        - A single track
+        - A batch of tracks (e.g. a whole pack / all tracks of a rights holder)
+        - Rights holder
+        - Artist
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: name
+    attributes:
+      label: Name
+      description: Track name / rights holder name / artist name.
+      placeholder: e.g. Vexaria
+    validations:
+      required: true
+
+  - type: input
+    id: artist
+    attributes:
+      label: Composer (tracks only)
+      description: The composer / artist of this track.
+      placeholder: e.g. ak+q
+    validations:
+      required: false
+
+  - type: input
+    id: rights-holder
+    attributes:
+      label: Rights holder (tracks only)
+      description: The rights holder this track belongs to (game / label / publisher).
+      placeholder: e.g. lowiro (Arcaea)
+    validations:
+      required: false
+
+  - type: dropdown
+    id: status
+    attributes:
+      label: Suggested status
+      description: What status would you like this entry to have? (Leave blank if unsure.)
+      options:
+        - Unsure / let maintainers decide
+        - forbidden
+        - restricted
+        - free
+      default: 0
+    validations:
+      required: false
+
+  - type: textarea
+    id: details
+    attributes:
+      label: Additional information
+      description: Any info that helps with entry, such as pack, duration, aliases, alternate names, collaboration attribution, etc.
+      placeholder: e.g. This track is Arcaea's first anniversary commemorative track, included in Memory Archive.
+    validations:
+      required: false
+
+  - type: textarea
+    id: references
+    attributes:
+      label: Reference sources
+      description: Provide verifiable source links (official pack lists, in-game info, composer/rights holder statements, etc.).
+      placeholder: |
+        - https://...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Confirmation
+      options:
+        - label: I have confirmed this entry is not yet included
+          required: true
+        - label: The information I provide is truthful and reliable, and I am willing to cooperate with maintainers for further verification
+          required: true

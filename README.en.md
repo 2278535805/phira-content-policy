@@ -2,7 +2,7 @@
 
 # Phira Content Policy
 
-A structured content policy database for the [Phira](https://phira.teamflos.com/) community. It provides queryable, traceable copyright policy information to determine whether a track, rights holder, or artist is allowed on Phira.
+A structured content policy database for the [Phira](https://phira.moe/) community. It provides queryable, traceable copyright policy information to determine whether a track, rights holder, or artist is allowed on Phira.
 
 **Live site: [teamflos.github.io/phira-content-policy](https://teamflos.github.io/phira-content-policy/)**
 
